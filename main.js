@@ -2,12 +2,8 @@ const profileController = require("./controllers/profileController");
 const signupController = require("./controllers/signupController");
 const loginController = require("./controllers/loginController");
 const jobDetailController = require("./controllers/jobDetailController");
-const mongoose = require("mongoose");
-mongoose.connect(
- "mongodb://localhost:27017/WTAT",
- {useNewUrlParser: true}
-);
-const db = mongoose.connection;
+const User = require("./models/user.module");
+
 
 const port = 3000,
     express = require("express"),
