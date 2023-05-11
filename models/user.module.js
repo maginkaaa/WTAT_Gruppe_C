@@ -1,9 +1,4 @@
 const mongoose = require("mongoose");
-mongoose.connect(
- "mongodb://localhost:27017/WTAT",
- {useNewUrlParser: true}
-);
-const db = mongoose.connection;
 
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
