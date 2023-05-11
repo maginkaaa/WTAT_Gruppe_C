@@ -2,14 +2,21 @@ const profileController = require("./controllers/profileController");
 const signupController = require("./controllers/signupController");
 const loginController = require("./controllers/loginController");
 const jobDetailController = require("./controllers/jobDetailController");
+const User = require("./models/user.module");
+
+const mongoose = require("mongoose");
+mongoose.connect(
+ "mongodb://127.0.0.1:27017/WTAT",
+ {useNewUrlParser: true}
+);
 
 const port = 3000,
-    express = require("express"),
-    app = express();
+express = require("express"),
+app = express();
 app.set("views", (__dirname + "/views")),
-    app.set("view engine", "ejs"),
+app.set("view engine", "ejs"),
 
-    app.get("/profile/:username", profileController.sendReqParam);
+app.get("/profile/:username", profileController.sendReqParam);
 app.get("/signup", signupController.getSignUp);
 app.get("/login", loginController.getLogIn);
 app.get("/jobs/:id", jobDetailController.getJobInfo);
