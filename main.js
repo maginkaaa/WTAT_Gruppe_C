@@ -3,6 +3,7 @@ const signupController = require("./controllers/signupController");
 const loginController = require("./controllers/loginController");
 const jobDetailController = require("./controllers/jobDetailController");
 const User = require("./models/user.module");
+const jobOpening = require("./models/jobOpening.module");
 
 const mongoose = require("mongoose");
 mongoose.connect(
