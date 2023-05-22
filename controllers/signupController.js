@@ -1,19 +1,37 @@
+const User = require("../models/user.module");
+
+exports.getAllUser = (req, res) => {
+  User.find({})
+    .exec()
+    .then((users) => {
+      res.render("users", {
+        users: users
+      });
+    })
+    .catch((error) => {
+      console.log(error.message);
+      return [];
+    })
+    .then(() => {
+      console.log("promise complete");
+    });
+};
+
 exports.getSignUp = (req, res) => {
-    res.render("signUp");
-   };
+  res.render("signUp");
+};
 
 exports.saveUser = (req, res) => {
   let newUser = new User({
-    name: req.body.name,
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
   });
 
   newUser.save()
-.then( () => {
-res.render("thanks");
-})
-.catch(error => {
-res.send(error);
-});
+    .then(() => {
+      res.render("users");
+    })
+    .catch(error => {
+      res.send(error);
+    });
 };

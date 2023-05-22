@@ -2,8 +2,6 @@ const profileController = require("./controllers/profileController");
 const signupController = require("./controllers/signupController");
 const loginController = require("./controllers/loginController");
 const jobDetailController = require("./controllers/jobDetailController");
-const User = require("./models/user.module");
-const jobOpening = require("./models/jobOpening.module");
 
 const mongoose = require("mongoose");
 mongoose.connect(
@@ -26,6 +24,7 @@ app.set("view engine", "ejs"),
 
 app.get("/profile/:username", profileController.sendReqParam);
 app.get("/signup", signupController.getSignUp);
+app.get("/user", signupController.getAllUser);
 app.get("/login", loginController.getLogIn);
 app.get("/jobs/:id", jobDetailController.getJobInfo);
 app.post("/signup", signupController.saveUser);
