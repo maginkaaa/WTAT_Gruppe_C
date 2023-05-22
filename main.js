@@ -11,8 +11,15 @@ mongoose.connect(
  {useNewUrlParser: true}
 );
 
+const db = mongoose.connection;
+db.once("open", () => {
+console.log("Successfully connected to MongoDB using Mongoose!");
+});
+
+
 const port = 3000,
 express = require("express"),
+
 app = express();
 app.set("views", (__dirname + "/views")),
 app.set("view engine", "ejs"),
@@ -21,6 +28,7 @@ app.get("/profile/:username", profileController.sendReqParam);
 app.get("/signup", signupController.getSignUp);
 app.get("/login", loginController.getLogIn);
 app.get("/jobs/:id", jobDetailController.getJobInfo);
+app.post("/signup", signupController.saveUser);
 app.listen(port, () => {
  console.log(`Server running on port: ${port}`);
 });
