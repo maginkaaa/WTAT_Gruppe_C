@@ -19,6 +19,7 @@ const port = 3000,
 express = require("express"),
 
 app = express();
+app.use(express.urlencoded({ extended: true })),
 app.set("views", (__dirname + "/views")),
 app.set("view engine", "ejs"),
 
