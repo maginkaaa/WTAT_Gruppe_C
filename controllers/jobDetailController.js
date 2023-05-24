@@ -4,13 +4,17 @@ exports.getJobInfo= (req, res) => {
     let companyname = "HTW";
     let location = "Berlin" ;
     let salary = "3500" ;
-    let requirements = "Bachelor of Science" ;
+    let requirements = "Bachelor of Science";
+    let description = "...";
     res.render(`jobDetail`,
         {
             jobtitle: jobtitle ,
             companyname: companyname,
             location: location,
             salary: salary,
-            requirements: requirements }
+            requirements: requirements,
+            description: description,
+            added: false,
+         }
     );
 };
