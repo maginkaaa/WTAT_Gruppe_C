@@ -1,0 +1,17 @@
+<h1>Add a new Job.</h1>
+
+<form action="/job/add" method="post">
+  <label for="title">Title:</label>
+  <input type="text" id="title" name="title" required><br><br>
+  <label for="company">Company:</label>
+  <input type="text" id="company" name="company" required><br><br>
+  <label for="description">Description:</label><br>
+  <textarea name="description" cols="40" rows="5"></textarea><br><br>
+  <label for="salary">Salary:</label>
+  <input type="number" id="salary" name="salary"><br><br>
+  <label for="location">Location:</label>
+  <input type="location" id="location" name="location" required><br><br>
+  <label for="text">Qualifications:</label><br>
+  <textarea name="qualifications" cols="40" rows="5"></textarea><br><br>
+  <input type="submit" value="Add Job">
+</form>
