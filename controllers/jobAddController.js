@@ -21,11 +21,11 @@ exports.saveJob = async (req, res) => {
     await newJob.save()
     res.render("jobDetail", 
         {
-            jobtitle: req.body.title,
-            companyname: req.body.company,
+            title: req.body.title,
+            company: req.body.company,
             location: req.body.location,
             salary: req.body.salary,
-            requirements: req.body.qualifications,
+            qualifications: req.body.qualifications,
             description: req.body.description,
             added: true,
          });

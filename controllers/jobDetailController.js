@@ -1,18 +1,18 @@
 exports.getJobInfo= (req, res) => {
     let id = req.params.id;
-    let jobtitle = "Software Developer";
-    let companyname = "HTW";
+    let title = "Software Developer";
+    let company = "HTW";
     let location = "Berlin" ;
     let salary = "3500" ;
-    let requirements = "Bachelor of Science";
+    let qualifications = "Bachelor of Science";
     let description = "...";
     res.render(`jobDetail`,
         {
-            jobtitle: jobtitle ,
-            companyname: companyname,
+            title: title,
+            company: company,
             location: location,
             salary: salary,
-            requirements: requirements,
+            qualifications: qualifications,
             description: description,
             added: false,
          }

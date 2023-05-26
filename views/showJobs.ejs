@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<% if(found){ %>
+    <h1>We found matching Jobs:</h1>
+    <% jobs.forEach(job => { %>
+        <ol>
+            <li><b>Job Title:</b> <%= job.title %></li>
+            <li><b>Company:</b> <%= job.company %></li>
+            <li><b>Location:</b> <%= job.location %></li>
+            <li><b>Salary:</b> <%= job.salary %></li>
+            <li><b>Qualifications:</b> <%= job.qualifications %></li>
+            <li><b>Additional information:</b> <%= job.description %></li>
+        </ol>
+    <% }); %>
+<% } else { %>
+    <h1>There are no matching jobs.</h1>
+<% } %>
+</html>
