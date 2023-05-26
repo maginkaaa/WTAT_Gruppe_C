@@ -4,11 +4,11 @@
     <h1>We found matching Jobs:</h1>
     <% jobs.forEach(job => { %>
         <ol>
-            <li><b>Job Title:</b> <%= job.jobtitle %></li>
-            <li><b>Company:</b> <%= job.companyname %></li>
+            <li><b>Job Title:</b> <%= job.title %></li>
+            <li><b>Company:</b> <%= job.company %></li>
             <li><b>Location:</b> <%= job.location %></li>
             <li><b>Salary:</b> <%= job.salary %></li>
-            <li><b>Requirements:</b> <%= job.requirements %></li>
+            <li><b>Qualifications:</b> <%= job.qualifications %></li>
             <li><b>Additional information:</b> <%= job.description %></li>
         </ol>
     <% }); %>

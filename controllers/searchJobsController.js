@@ -17,7 +17,7 @@ exports.searchJobs = async (req, res) => {
                 [
                     {
                         title: req.body.title,
-                        companyname: req.body.companyname,
+                        company: req.body.company,
                         location: req.body.location,
                         salary: req.body.salary,
                     }
