@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
-<h1>This is the Job Detail page.</h1>
+<% if(added){ %>
+    <h1>Job added successfully.</h1>
+<% } else { %>  
+    <h1>This is the Job Detail page.</h1>
+<% } %>
+
 
 <ol>
 <li><b>Job Title:</b> <%= jobtitle %></li>
@@ -8,8 +13,11 @@
 <li><b>Location:</b> <%= location %></li>
 <li><b>Salary:</b> <%= salary %></li>
 <li><b>Requirements:</b> <%= requirements %></li>
-<li><b>Additional information:</b></li>
+<li><b>Additional information:</b> <%= description %></li>
 </ol>
 
-<p>This isn`t the right job? <a href="./jobOverview">Have a look at our other Jobs</a>
+<% if(!added){ %>
+    <p>This isn`t the right job? <a href="./jobOverview">Have a look at our other Jobs</a>
+ <% } %>
+
 </html>
