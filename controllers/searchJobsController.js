@@ -9,8 +9,6 @@ exports.searchJobs = async (req, res) => {
     let jobs;
     let found = false;
 
-    console.log(JobOpening.find());
-
     try {
         jobs = await JobOpening.find({
             $or:
