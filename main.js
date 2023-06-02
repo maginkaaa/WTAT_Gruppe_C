@@ -30,6 +30,8 @@ app.get("/jobs/:id", jobController.getJobInfo);
 app.get("/job/add", jobController.addJob);
 app.get("/job/search", jobController.searchForaJob);
 
+app.get("/admin/jobs", jobController.getAllJobs);
+
 app.post("/job/add", jobController.saveJob);
 app.post("/signup", userController.saveUser);
 app.post("/job/search", jobController.searchJobs);
