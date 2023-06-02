@@ -4,6 +4,24 @@ exports.addJob = (req, res) => {
     res.render("addJob");
 };
 
+exports.getAllJobs = async (req, res) => {
+    let result = []
+    for await (const job of JobOpening.find()) {
+        result.push({
+            title: job.title,
+            company: job.company,
+            description: job.description,
+            salary: job.salary,
+            location: job.location,
+            qualifications: job.qualifications,
+        });
+    }
+    res.render("adminJobList",
+        {
+            jobs: result
+        });
+  };
+
 exports.saveJob = async (req, res) => {
     const query = await JobOpening.findOne({title: req.body.title});
     if (query != null)
