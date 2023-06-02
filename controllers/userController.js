@@ -29,18 +29,21 @@ exports.saveUser = (req, res) => {
 
   newUser.save()
     .then(() => {
-      res.render("users");
+      return User.find({}); // Retrieve the updated list of users
     })
-    .catch(error => {
+    .then((users) => {
+      res.render("users", { users });
+    })
+    .catch((error) => {
       res.send(error);
     });
 };
 
 exports.sendReqParam = (req, res) => {
-    let username = req.params.username;
-    res.send(`This is the profile page for ${username}`);
-   };
+  let username = req.params.username;
+  res.send(`This is the profile page for ${username}`);
+};
 
 exports.getLogIn = (req, res) => {
-       res.render("logIn");
+  res.render("logIn");
 };
