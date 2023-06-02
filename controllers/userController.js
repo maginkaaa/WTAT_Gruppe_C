@@ -35,3 +35,12 @@ exports.saveUser = (req, res) => {
       res.send(error);
     });
 };
+
+exports.sendReqParam = (req, res) => {
+    let username = req.params.username;
+    res.send(`This is the profile page for ${username}`);
+   };
+
+exports.getLogIn = (req, res) => {
+       res.render("logIn");
+};
