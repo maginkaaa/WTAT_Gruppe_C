@@ -1,9 +1,6 @@
-const profileController = require("./controllers/profileController");
-const signupController = require("./controllers/signupController");
-const loginController = require("./controllers/loginController");
-const jobAddController = require("./controllers/jobAddController");
-const jobDetailController = require("./controllers/jobDetailController");
-const searchJobsController = require("./controllers/searchJobsController");
+const userController = require("./controllers/userController");
+const jobController = require("./controllers/jobController");
+
 
 const mongoose = require("mongoose");
 mongoose.connect(
@@ -25,17 +22,17 @@ app.use(express.urlencoded({ extended: true })),
 app.set("views", (__dirname + "/views")),
 app.set("view engine", "ejs"),
 
-app.get("/profile/:username", profileController.sendReqParam);
-app.get("/signup", signupController.getSignUp);
-app.get("/user", signupController.getAllUser);
-app.get("/login", loginController.getLogIn);
-app.get("/jobs/:id", jobDetailController.getJobInfo);
-app.get("/job/add", jobAddController.addJob);
-app.get("/job/search", searchJobsController.searchForaJob);
+app.get("/profile/:username", userController.sendReqParam);
+app.get("/signup", userController.getSignUp);
+app.get("/user", userController.getAllUser);
+app.get("/login", userController.getLogIn);
+app.get("/jobs/:id", jobController.getJobInfo);
+app.get("/job/add", jobController.addJob);
+app.get("/job/search", jobController.searchForaJob);
 
-app.post("/job/add", jobAddController.saveJob);
-app.post("/signup", signupController.saveUser);
-app.post("/job/search", searchJobsController.searchJobs);
+app.post("/job/add", jobController.saveJob);
+app.post("/signup", userController.saveUser);
+app.post("/job/search", jobController.searchJobs);
 
 app.listen(port, () => {
  console.log(`Server running on port: ${port}`);
