@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html>
-<% if(added){ %>
+<% if (added) { %>
     <h1>Job added successfully.</h1>
-<% } else { %>  
+<% } else { %>
     <h1>This is the Job Detail page.</h1>
 <% } %>
 
-
 <ol>
-<li><b>Job Title:</b> <%= title %></li>
-<li><b>Company:</b> <%= company %></li>
-<li><b>Location:</b> <%= location %></li>
-<li><b>Salary:</b> <%= salary %></li>
-<li><b>Qualifications:</b> <%= qualifications %></li>
-<li><b>Additional information:</b> <%= description %></li>
+    <li><b>Job Title:</b> <%= job.title %></li> <!-- Access the title property of job object -->
+    <li><b>Company:</b> <%= job.company %></li>
+    <li><b>Location:</b> <%= job.location %></li>
+    <li><b>Salary:</b> <%= job.salary %></li>
+    <li><b>Qualifications:</b> <%= job.qualifications %></li>
+    <li><b>Additional information:</b> <%= job.description %></li>
 </ol>
 
-<% if(!added){ %>
-    <p>This isn`t the right job? <a href="./jobOverview">Have a look at our other Jobs</a>
- <% } %>
+<% if (!added) { %>
+    <p>This isn't the right job? <a href="./jobOverview">Have a look at our other Jobs</a></p>
+    <div>
+      <a href="<%= `/jobs/${job._id}/delete?_method=DELETE` %>"
+ onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
 
+    </div>
+<% } %>
 </html>

@@ -1,109 +1,134 @@
 const JobOpening = require("../models/jobOpening.module");
 
 exports.addJob = (req, res) => {
-    res.render("addJob");
+  res.render("addJob");
 };
 
 exports.getAllJobs = async (req, res) => {
-    let result = []
-    for await (const job of JobOpening.find()) {
-        result.push({
-            title: job.title,
-            company: job.company,
-            description: job.description,
-            salary: job.salary,
-            location: job.location,
-            qualifications: job.qualifications,
-        });
-    }
-    res.render("adminJobList",
-        {
-            jobs: result
-        });
-  };
+  try {
+    const jobs = await JobOpening.find();
+    res.render("adminJobList", {
+      jobs: jobs
+    });
+  } catch (error) {
+    console.log(`Error fetching all jobs: ${error.message}`);
+    res.redirect("/");
+  }
+};
 
 exports.saveJob = async (req, res) => {
-    const query = await JobOpening.findOne({title: req.body.title});
-    if (query != null)
-        return res.redirect("/job/add");
+  const query = await JobOpening.findOne({ title: req.body.title });
+  if (query != null)
+    return res.redirect("/job/add");
 
-    let newJob = new JobOpening({
-        title: req.body.title,
-        company: req.body.company,
-        description: req.body.description,
-        salary: req.body.salary,
-        location: req.body.location,
-        qualifications: req.body.qualifications,
+  const newJob = new JobOpening({
+    title: req.body.title,
+    company: req.body.company,
+    description: req.body.description,
+    salary: req.body.salary,
+    location: req.body.location,
+    qualifications: req.body.qualifications,
+  });
+
+  try {
+    await newJob.save();
+    res.render("jobDetail", {
+      job: newJob,
+      added: true,
+    });
+  } catch (error) {
+    console.log(`Error saving job: ${error.message}`);
+    res.redirect("/job/add");
+  }
+};
+
+exports.getJobInfo = async (req, res) => {
+  try {
+    const jobs = await JobOpening.find();
+    const id = req.params.id;
+    const job = await JobOpening.findById(id);
+
+    if (!job) {
+      throw new Error("Job not found");
+    }
+
+    res.render("jobDetail", {
+      job: job,
+      jobs: jobs,
+      added: false,
+    });
+  } catch (error) {
+    console.log(`Error fetching job details: ${error.message}`);
+    res.redirect("/job/search");
+  }
+};
+
+exports.searchForaJob = (req, res) => {
+  res.render("searchJobs");
+};
+
+exports.searchJobs = async (req, res) => {
+  try {
+    const jobs = await JobOpening.find({
+      $or: [
+        {
+          title: req.body.title,
+          company: req.body.company,
+          location: req.body.location,
+          salary: req.body.salary,
+        },
+      ],
     });
 
-    await newJob.save()
-    res.render("jobDetail",
-        {
-            title: req.body.title,
-            company: req.body.company,
-            location: req.body.location,
-            salary: req.body.salary,
-            qualifications: req.body.qualifications,
-            description: req.body.description,
-            added: true,
-         });
+    const found = jobs.length > 0;
+
+    res.render("showJobs", {
+      jobs: jobs,
+      found: found,
+    });
+  } catch (error) {
+    console.log(`Error searching for jobs: ${error.message}`);
+    res.redirect("/job/search");
+  }
+};
+
+exports.deleteJob = async (req, res) => {
+  const id = req.params.id;
+  try {
+    await JobOpening.findByIdAndRemove(id);
+    console.log(`Deleting Job by ID was successfully`);
+    res.redirect("/admin/jobs");
+  } catch (error) {
+    console.log(`Error deleting Job by ID: ${error.message}`);
+  }
+};
+
+exports.editJob = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const job = await JobOpening.findById(id);
+    res.render("jobEdit", { job: job });
+  } catch (error) {
+    console.log(`Error fetching Job by ID: ${error.message}`);
+
+  }
+};
+
+exports.updateJob = async (req, res) => {
+  const id = req.params.id;
+  const jobParams = {
+    title: req.body.title,
+    company: req.body.company,
+    description: req.body.description,
+    salary: req.body.salary,
+    location: req.body.location,
+    qualifications: req.body.qualifications,
   };
-
-  exports.getJobInfo= (req, res) => {
-      let id = req.params.id;
-      let title = "Software Developer";
-      let company = "HTW";
-      let location = "Berlin" ;
-      let salary = "3500" ;
-      let qualifications = "Bachelor of Science";
-      let description = "...";
-      res.render(`jobDetail`,
-          {
-              title: title,
-              company: company,
-              location: location,
-              salary: salary,
-              qualifications: qualifications,
-              description: description,
-              added: false,
-           }
-      );
-  };
-
-  exports.searchForaJob = (req, res) => {
-      res.render("searchJobs");
-  };
-
-  exports.searchJobs = async (req, res) => {
-
-      let jobs;
-      let found = false;
-
-      try {
-          jobs = await JobOpening.find({
-              $or:
-                  [
-                      {
-                          title: req.body.title,
-                          company: req.body.company,
-                          location: req.body.location,
-                          salary: req.body.salary,
-                      }
-                  ]
-          });
-      }
-
-      catch(e){
-          return res.redirect("/job/search");
-      }
-
-      if(jobs.length > 0){
-          found = true;
-      }
-
-      res.render("showJobs",
-          {
-              jobs,
-              found
-          });
-  };
+  try {
+    await JobOpening.findByIdAndUpdate(id, { $set: jobParams });
+    console.log(`Updating Job by ID was successfully`);
+    res.redirect(`/jobs/${id}`);
+  } catch (error) {
+    console.log(`Error updating Job by ID: ${error.message}`);
+  }
+};
