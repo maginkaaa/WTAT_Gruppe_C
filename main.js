@@ -13,24 +13,33 @@ db.once("open", () => {
 console.log("Successfully connected to MongoDB using Mongoose!");
 });
 
-
 const port = 3000,
 express = require("express"),
 
 app = express();
-app.use(express.urlencoded({ extended: true })),
-app.set("views", (__dirname + "/views")),
-app.set("view engine", "ejs"),
+app.use(express.urlencoded({ extended: true }));
+app.set("views", __dirname + "/views");
+app.set("view engine", "ejs");
+
+app.use(methodOverride("_method", {
+  methods: ["POST", "GET"]
+}));
+
+app.delete("/jobs/:id/delete", jobController.deleteJob);
+app.delete("/user/:id/delete", userController.deleteUser);
 
 app.get("/profile/:username", userController.sendReqParam);
 app.get("/signup", userController.getSignUp);
 app.get("/user", userController.getAllUser);
 app.get("/login", userController.getLogIn);
+app.get("/signup", userController.addUser);
 app.get("/jobs/:id", jobController.getJobInfo);
 app.get("/job/add", jobController.addJob);
 app.get("/job/search", jobController.searchForaJob);
 
 app.get("/admin/jobs", jobController.getAllJobs);
+app.put("/jobs/:id/update", jobController.updateJob);
+app.put("/user/:id/update", userController.updateUser);
 
 app.post("/job/add", jobController.saveJob);
 app.post("/signup", userController.saveUser);

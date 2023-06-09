@@ -1,4 +1,22 @@
-<% users.forEach(u => {%>
-<p><%= u.username %></p>
-<p><%= u.password %></p>
-<% })%> 
+<h1>This is a list of all Users:</h1> <% if (users.length === 0) { %>
+    <p>There are no users yet.</p>
+<% } else { %> <% users.forEach(u => {%>
+<h3>Username: <%= u.username %></h3>
+<p>Password: <%= u.password %></p>
+<div>
+    <a href="<%=`/user/${u._id}/delete?_method=DELETE` %>"
+       onclick="return confirm('Are you sure you want to delete this record?')">Delete this user</a>
+
+</div>
+<div class="data-form">
+    <form method="POST" action="<%=`/user/${u._id}/update?_method=PUT`%>">
+        <p>Edit user:</p>
+        <label for="inputTitle">User</label>
+        <input type="text" name="username" id="inputUsername" value="<%= u.username %>" placeholder="Username" autofocus>
+        <label for="inputUsername">Username</label>
+        <input type="text" name="password" id="inputPassword" value="<%= u.password %>" placeholder="Password">
+        <label for="inputPassword">Password</label>
+        <button type="submit">Edit this User</button>
+    </form>
+</div>
+<% })%>   <% } %>

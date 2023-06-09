@@ -1,5 +1,9 @@
 const User = require("../models/user.module");
 
+exports.addUser = (req, res) => {
+  res.render("signUp");
+};
+
 exports.getAllUser = (req, res) => {
   User.find({})
     .exec()
@@ -37,6 +41,32 @@ exports.saveUser = (req, res) => {
     .catch((error) => {
       res.send(error);
     });
+};
+
+exports.deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    await User.findByIdAndRemove(id);
+    console.log(`Deleting User by ID was successful`);
+    res.redirect("/user");
+  } catch (error) {
+    console.log(`Error deleting User by ID: ${error.message}`);
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const id = req.params.id;
+  const userParams = {
+    username: req.body.username,
+    password: req.body.password,
+  };
+  try {
+    await User.findByIdAndUpdate(id, { $set: userParams });
+    console.log(`Updating User by ID was successful`);
+    res.redirect(`/user`);
+  } catch (error) {
+    console.log(`Error updating User by ID: ${error.message}`);
+  }
 };
 
 exports.sendReqParam = (req, res) => {
