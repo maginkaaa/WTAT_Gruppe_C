@@ -23,6 +23,27 @@ app.use(methodOverride("_method", {
   methods: ["POST", "GET"]
 }));
 
+const expressSession = require("express-session");
+const cookieParser = require("cookie-parser");
+const connectFlash = require("connect-flash");
+const router = express.Router();
+
+router.use(cookieParser("secret_passcode"));
+router.use(expressSession({
+ secret: "secret_passcode",
+ cookie: {
+ maxAge: 4000000
+ },
+ resave: false,
+ saveUninitialized: false
+}));
+router.use(connectFlash());
+
+router.use((req, res, next) => {
+  res.locals.flashMessages = req.flash();
+  next();
+ });
+
 app.delete("/jobs/:id/delete", jobController.deleteJob);
 app.delete("/user/:id/delete", userController.deleteUser);
 
