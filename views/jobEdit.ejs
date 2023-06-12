@@ -1,0 +1,18 @@
+<div class="data-form">
+    <form method="POST" action="<%=`/jobs/${job._id}/update?_method=PUT`%>">
+        <h2>Edit job:</h2>
+        <label for="inputTitle">Job Title</label>
+        <input type="text" name="title" id="inputTitle" value="<%= job.title %>" placeholder="Job Title" autofocus>
+        <label for="inputCompany">Company</label>
+        <input type="text" name="company" id="inputCompany" value="<%= job.company %>" placeholder="Company">
+        <label for="inputLocation">Location</label>
+        <input type="text" name="location" id="inputLocation" value="<%= job.location %>" placeholder="Location">
+        <label for="inputSalary">Salary</label>
+        <input type="text" name="salary" id="inputSalary" value="<%= job.salary %>" placeholder="Salary">
+        <label for="inputQualifications">Qualifications</label>
+        <input type="text" name="qualifications" id="inputQualifications" value="<%= job.qualifications %>" placeholder="Qualifications">
+        <label for="inputDescription">Additional Information</label>
+        <textarea name="description" id="inputDescription" placeholder="Additional Information"><%= job.description %></textarea>
+        <button type="submit">Update</button>
+    </form>
+</div>
