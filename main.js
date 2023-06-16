@@ -63,6 +63,7 @@ app.put("/user/:id/update", userController.updateUser);
 
 app.post("/job/add", jobController.saveJob);
 app.post("/signup", userController.saveUser);
+app.post("/login", userController.authenticate);
 app.post("/job/search", jobController.searchJobs);
 
 app.listen(port, () => {
