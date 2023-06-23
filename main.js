@@ -1,5 +1,6 @@
 const userController = require("./controllers/userController");
 const jobController = require("./controllers/jobController");
+const User = require("./models/user.module");
 
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://127.0.0.1:27017/WTAT", { useNewUrlParser: true });
@@ -24,22 +25,30 @@ app.use(methodOverride("_method", {
 }));
 
 const expressSession = require("express-session");
+const router = express.Router();
+app.use(expressSession({
+    secret: "secret_passcode",
+    cookie: {
+        maxAge: 4000000
+    },
+    resave: false,
+    saveUninitialized: false
+}));
+
 const cookieParser = require("cookie-parser");
 const connectFlash = require("connect-flash");
-const router = express.Router();
+const passport = require("passport");
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-router.use(cookieParser("secret_passcode"));
-router.use(expressSession({
- secret: "secret_passcode",
- cookie: {
- maxAge: 4000000
- },
- resave: false,
- saveUninitialized: false
-}));
-router.use(connectFlash());
+app.use(connectFlash());
 
-router.use((req, res, next) => {
+app.use(cookieParser("secret_passcode"));
+
+app.use((req, res, next) => {
   res.locals.flashMessages = req.flash();
   next();
  });

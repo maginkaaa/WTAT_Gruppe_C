@@ -1,6 +1,7 @@
 const User = require("../models/user.module");
 const flash = require("connect-flash");
 const bcrypt = require("bcrypt");
+const passport = require("passport")
 
 exports.addUser = (req, res) => {
   res.render("signUp");
@@ -29,7 +30,7 @@ exports.getSignUp = (req, res) => {
   res.render("signUp");
 };
 
-exports.saveUser = (req, res, next) => {
+/*exports.saveUser = (req, res, next) => {
   let newUser;
   let users = [];
   bcrypt.hash(req.body.password, 10).then(hash => {   
@@ -65,11 +66,31 @@ exports.saveUser = (req, res, next) => {
   })
   .catch(error => { console.log(`Error in hashing password: ${error.message}`); 
   next(error);    });
+};*/
 
-  
-};
+exports.saveUser = (req, res, next) => {
+    if (req.skip) next();
+    let newUser = new User({
+        username: req.body.username,
+        //password: req.body.password,
+    });
+    User.register(newUser, req.body.password, (error, user) => {
+        if (user) {
+            console.log("success", `${user.username}'s account created
+➥ successfully!`);
+            res.redirect = "/user";
+            next();
+        }
+        else {
+            console.log("error", `Failed to create user account because:
+➥ ${error.message}.`);
+            res.redirect = "/signUp";
+            next();
+        }
+    });
+}
 
-exports.authenticate = (req, res, next) => {
+/*exports.authenticate = (req, res, next) => {
     User.findOne({email: req.body.email})
      .then(user => {
        if (user) {
@@ -99,7 +120,14 @@ exports.authenticate = (req, res, next) => {
                     console.log(`Error logging in user: ${error.message}`); 
                     next(error); 
                   }); 
-                }
+                }*/
+
+exports.authenticate = passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: "Failed to login.",
+    successRedirect: "/userDetail",
+    successFlash: "Logged in!"
+}),
 
 exports.deleteUser = async (req, res) => {
   const id = req.params.id;
@@ -116,7 +144,7 @@ exports.updateUser = async (req, res) => {
   const id = req.params.id;
   const userParams = {
     username: req.body.username,
-    password: req.body.password,
+    //password: req.body.password,
   };
   try {
     await User.findByIdAndUpdate(id, { $set: userParams });
