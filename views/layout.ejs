@@ -7,3 +7,12 @@
    <% } %>
    <% } %>
    </div>
+
+   <div class="login">
+       <% if (loggedIn) { %>
+       <p> Logged in as
+         <a href="<%=`/users/${currentUser._id}`%>">
+           <%= currentUser.fullName %></a>
+    </p>
+    <% } %>
+      </div>

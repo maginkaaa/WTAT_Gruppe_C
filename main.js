@@ -50,13 +50,15 @@ app.use(cookieParser("secret_passcode"));
 
 app.use((req, res, next) => {
   res.locals.flashMessages = req.flash();
+  res.locals.loggedIn = req.isAuthenticated();
+  res.locals.currentUser = req.user;
   next();
  });
 
 app.delete("/jobs/:id/delete", jobController.deleteJob);
 app.delete("/user/:id/delete", userController.deleteUser);
 
-app.get("/profile/:username", userController.sendReqParam);
+app.get("/users/:username", userController.sendReqParam);
 app.get("/signup", userController.getSignUp);
 app.get("/user", userController.getAllUser);
 app.get("/login", userController.getLogIn);
