@@ -76,14 +76,13 @@ exports.saveUser = (req, res, next) => {
     });
     User.register(newUser, req.body.password, (error, user) => {
         if (user) {
-            console.log("success", `${user.username}'s account created
-➥ successfully!`);
+            console.log("success", `${user.username}'s account created successfully!`);
             res.redirect = "/user";
             next();
         }
         else {
-            console.log("error", `Failed to create user account because:
-➥ ${error.message}.`);
+            console.log("error", `Failed to create user account because:${error.message}.`);
+            req.flash("error", `Failed to create user account because:${error.message}.`);
             res.redirect = "/signUp";
             next();
         }
