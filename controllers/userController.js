@@ -1,6 +1,7 @@
 const User = require("../models/user.module");
 const flash = require("connect-flash");
 const bcrypt = require("bcrypt");
+const passport = require("passport")
 
 exports.addUser = (req, res) => {
   res.render("signUp");
@@ -29,10 +30,10 @@ exports.getSignUp = (req, res) => {
   res.render("signUp");
 };
 
-exports.saveUser = (req, res, next) => {
+/*exports.saveUser = (req, res, next) => {
   let newUser;
   let users = [];
-  bcrypt.hash(req.body.password, 10).then(hash => {   
+  bcrypt.hash(req.body.password, 10).then(hash => {
     newUser = new User({
       username: req.body.username,
       password: hash,
@@ -63,13 +64,31 @@ exports.saveUser = (req, res, next) => {
   .then(() => {
     res.render("users", { users });
   })
-  .catch(error => { console.log(`Error in hashing password: ${error.message}`); 
+  .catch(error => { console.log(`Error in hashing password: ${error.message}`);
   next(error);    });
+};*/
 
-  
+exports.saveUser = async (req, res) => {
+  try {
+    let newUser = new User({
+      username: req.body.username,
+      //password: req.body.password,
+    });
+
+    const user = await User.register(newUser, req.body.password);
+
+    console.log("success", `${user.username}'s account created successfully!`);
+    req.flash("success", `${user.username}'s account created successfully!`);
+    res.redirect("/user");
+  } catch (error) {
+    console.log("error", `Failed to create user account because: ${error.message}.`);
+    req.flash("error", `Failed to create user account because: ${error.message}.`);
+    res.redirect("/signup");
+  }
 };
 
-exports.authenticate = (req, res, next) => {
+
+/*exports.authenticate = (req, res, next) => {
     User.findOne({email: req.body.email})
      .then(user => {
        if (user) {
@@ -78,37 +97,44 @@ exports.authenticate = (req, res, next) => {
              if (passwordsMatch) {
                         res.locals.redirect = `/users/${user._id}`;
                         req.flash("success", `${user.username}'s logged in ➥successfully!`);
-                        res.locals.user = user; 
+                        res.locals.user = user;
                       }
                       else
-                      { 
-                          req.flash("error", "Failed to log in user account: ➥Incorrect Password."); 
-                          res.locals.redirect = "/users/login"; 
-                        } 
-                        next(); 
-                      }); 
-                    } 
-                    else 
-                    { 
-                      req.flash("error", "Failed to log in user account: User ➥account not found."); 
-                      res.locals.redirect = "/users/login"; 
-                      next();    
-                    }  
-                  }) 
-                  .catch(error => { 
-                    console.log(`Error logging in user: ${error.message}`); 
-                    next(error); 
-                  }); 
-                }
+                      {
+                          req.flash("error", "Failed to log in user account: ➥Incorrect Password.");
+                          res.locals.redirect = "/users/login";
+                        }
+                        next();
+                      });
+                    }
+                    else
+                    {
+                      req.flash("error", "Failed to log in user account: User ➥account not found.");
+                      res.locals.redirect = "/users/login";
+                      next();
+                    }
+                  })
+                  .catch(error => {
+                    console.log(`Error logging in user: ${error.message}`);
+                    next(error);
+                  });
+                }*/
+
+exports.authenticate = passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: "Failed to login.",
+    successRedirect: "/user",
+    successFlash: "Logged in!"
+}),
 
 exports.deleteUser = async (req, res) => {
   const id = req.params.id;
   try {
     await User.findByIdAndRemove(id);
-    console.log(`Deleting User by ID was successful`);
+    req.flash('success', 'Deleting User by ID was successful');
     res.redirect("/user");
   } catch (error) {
-    console.log(`Error deleting User by ID: ${error.message}`);
+    req.flash('error', `Error deleting User by ID: ${error.message}`);
   }
 };
 
@@ -116,7 +142,7 @@ exports.updateUser = async (req, res) => {
   const id = req.params.id;
   const userParams = {
     username: req.body.username,
-    password: req.body.password,
+    //password: req.body.password,
   };
   try {
     await User.findByIdAndUpdate(id, { $set: userParams });
@@ -133,5 +159,5 @@ exports.sendReqParam = (req, res) => {
 };
 
 exports.getLogIn = (req, res) => {
-  res.render("logIn");
+  res.render("login");
 };
