@@ -68,26 +68,25 @@ exports.getSignUp = (req, res) => {
   next(error);    });
 };*/
 
-exports.saveUser = (req, res, next) => {
-    if (req.skip) next();
+exports.saveUser = async (req, res) => {
+  try {
     let newUser = new User({
-        username: req.body.username,
-        //password: req.body.password,
+      username: req.body.username,
+      //password: req.body.password,
     });
-    User.register(newUser, req.body.password, (error, user) => {
-        if (user) {
-            console.log("success", `${user.username}'s account created successfully!`);
-            res.redirect = "/user";
-            next();
-        }
-        else {
-            console.log("error", `Failed to create user account because:${error.message}.`);
-            req.flash("error", `Failed to create user account because:${error.message}.`);
-            res.redirect = "/signUp";
-            next();
-        }
-    });
-}
+
+    const user = await User.register(newUser, req.body.password);
+
+    console.log("success", `${user.username}'s account created successfully!`);
+    req.flash("success", `${user.username}'s account created successfully!`);
+    res.redirect("/user");
+  } catch (error) {
+    console.log("error", `Failed to create user account because: ${error.message}.`);
+    req.flash("error", `Failed to create user account because: ${error.message}.`);
+    res.redirect("/signup");
+  }
+};
+
 
 /*exports.authenticate = (req, res, next) => {
     User.findOne({email: req.body.email})
