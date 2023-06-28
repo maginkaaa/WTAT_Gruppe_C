@@ -55,8 +55,8 @@ app.use((req, res, next) => {
 const router = express.Router();
 userRoutes = require("./routes/userRoutes"),
 jobRoutes = require("./routes/jobRoutes");
-router.use("/users", userRoutes);
-router.use("/jobs", jobRoutes);
+app.use("/users", userRoutes);
+app.use("/jobs", jobRoutes);
 
 module.exports = router;
 
