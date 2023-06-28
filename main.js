@@ -1,5 +1,3 @@
-const userController = require("./controllers/userController");
-const jobController = require("./controllers/jobController");
 const User = require("./models/user.module");
 
 const mongoose = require("mongoose");
@@ -25,7 +23,6 @@ app.use(methodOverride("_method", {
 }));
 
 const expressSession = require("express-session");
-const router = express.Router();
 app.use(expressSession({
     secret: "secret_passcode",
     cookie: {
@@ -55,27 +52,13 @@ app.use((req, res, next) => {
   next();
  });
 
-app.delete("/jobs/:id/delete", jobController.deleteJob);
-app.delete("/user/:id/delete", userController.deleteUser);
+const router = express.Router();
+userRoutes = require("./routes/userRoutes"),
+jobRoutes = require("./routes/jobRoutes");
+router.use("/users", userRoutes);
+router.use("/jobs", jobRoutes);
 
-app.get("/users/:username", userController.sendReqParam);
-app.get("/signup", userController.getSignUp);
-app.get("/user", userController.getAllUser);
-app.get("/login", userController.getLogIn);
-app.get("/signup", userController.addUser);
-app.get("/jobs/:id", jobController.getJobInfo);
-app.get("/job/add", jobController.addJob);
-app.get("/job/search", jobController.searchForaJob);
-app.get("/admin/jobs", jobController.getAllJobs);
-app.get("/jobs/:id/edit", jobController.editJob);
-
-app.put("/jobs/:id/update", jobController.updateJob);
-app.put("/user/:id/update", userController.updateUser);
-
-app.post("/job/add", jobController.saveJob);
-app.post("/signup", userController.saveUser);
-app.post("/login", userController.authenticate);
-app.post("/job/search", jobController.searchJobs);
+module.exports = router;
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
