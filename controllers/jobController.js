@@ -7,6 +7,11 @@ exports.addJob = (req, res) => {
 exports.getAllJobs = async (req, res) => {
   try {
     const jobs = await JobOpening.find();
+
+    if (req.query.format === "json") {
+      return res.json(jobs); // respond with JSON
+    }
+
     res.render("adminJobList", {
       jobs: jobs
     });
@@ -19,7 +24,7 @@ exports.getAllJobs = async (req, res) => {
 exports.saveJob = async (req, res) => {
   const query = await JobOpening.findOne({ title: req.body.title });
   if (query != null)
-    return res.redirect("/job/add");
+    return res.redirect("/jobs/add");
 
   const newJob = new JobOpening({
     title: req.body.title,
@@ -38,7 +43,7 @@ exports.saveJob = async (req, res) => {
     });
   } catch (error) {
     console.log(`Error saving job: ${error.message}`);
-    res.redirect("/job/add");
+    res.redirect("/jobs/add");
   }
 };
 
@@ -50,6 +55,10 @@ exports.getJobInfo = async (req, res) => {
 
     if (!job) {
       throw new Error("Job not found");
+    }
+
+    if (req.query.format === "json") {
+      return res.json(job); // respond with JSON
     }
 
     res.render("jobDetail", {
@@ -69,17 +78,27 @@ exports.searchForaJob = (req, res) => {
 
 exports.searchJobs = async (req, res) => {
   try {
-    const jobs = await JobOpening.find({
-      $or: [
-        {
-          title: req.body.title,
-          company: req.body.company,
-          location: req.body.location,
-          salary: req.body.salary,
-        },
-      ],
-    });
+    const { title, company, location, salary } = req.body;
 
+    const searchParams = {};
+
+    if (title) {
+      searchParams.title = title;
+    }
+
+    if (company) {
+      searchParams.company = company;
+    }
+
+    if (location) {
+      searchParams.location = location;
+    }
+
+    if (salary) {
+      searchParams.salary = salary;
+    }
+
+    const jobs = await JobOpening.find({ $or: [searchParams] });
     const found = jobs.length > 0;
 
     res.render("showJobs", {
@@ -88,9 +107,10 @@ exports.searchJobs = async (req, res) => {
     });
   } catch (error) {
     console.log(`Error searching for jobs: ${error.message}`);
-    res.redirect("/job/search");
+    res.redirect("/jobs/search");
   }
 };
+
 
 exports.deleteJob = async (req, res) => {
   const id = req.params.id;

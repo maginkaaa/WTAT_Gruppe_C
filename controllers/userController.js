@@ -11,6 +11,9 @@ exports.getAllUser = (req, res) => {
   User.find({})
     .exec()
     .then((users) => {
+      if (req.query.format === "json") {
+        return res.json(users); // respond with JSON
+      }
       res.render("users", {
         users: users,
         flashMessages: req.flash() // Pass flash messages to the template
@@ -42,28 +45,31 @@ exports.saveUser = async (req, res) => {
 
     console.log("success", `${user.username}'s account created successfully!`);
     req.flash("success", `${user.username}'s account created successfully!`);
-    res.redirect("/user");
+    res.redirect('/users/' + user.username);
   } catch (error) {
     console.log("error", `Failed to create user account because: ${error.message}.`);
     req.flash("error", `Failed to create user account because: ${error.message}.`);
-    res.redirect("/signup");
+    res.redirect("/users/signup");
   }
 };
 
 
 exports.authenticate = passport.authenticate("local", {
-    failureRedirect: "/login",
+    failureRedirect: "/users/login",
     failureFlash: "Failed to login.",
-    successRedirect: "/user",
     successFlash: "Logged in!"
 }),
+
+exports.redirectAfterLogin = (req, res) => {
+  res.redirect("/users/" + req.user.username);
+};
 
 exports.deleteUser = async (req, res) => {
   const id = req.params.id;
   try {
     await User.findByIdAndRemove(id);
     req.flash('success', 'Deleting User by ID was successful');
-    res.redirect("/user");
+    res.redirect("/users/user");
   } catch (error) {
     req.flash('error', `Error deleting User by ID: ${error.message}`);
   }
@@ -78,7 +84,7 @@ exports.updateUser = async (req, res) => {
   try {
     await User.findByIdAndUpdate(id, { $set: userParams });
     console.log(`Updating User by ID was successful`);
-    res.redirect(`/user`);
+    res.redirect(`/users/users`);
   } catch (error) {
     console.log(`Error updating User by ID: ${error.message}`);
   }
