@@ -3,6 +3,7 @@
 <% } else { %> <% users.forEach(u => {%>
 <h3>Username: <%= u.username %></h3>
 <p>Password: <%= u.password %></p>
+<p>Token: <%= u.apiToken %></p>
 <div>
     <a href="<%=`/user/${u._id}/delete?_method=DELETE` %>"
        onclick="return confirm('Are you sure you want to delete this record?')">Delete this user</a>
