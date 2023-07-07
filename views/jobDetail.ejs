@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
+<head><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script></head>
 <% if (added) { %>
     <h1>Job added successfully.</h1>
 <% } else { %>
     <h1>This is the Job Detail page.</h1>
 <% } %>
 
-<ol>
-    <li><b>Job Title:</b> <%= job.title %></li> <!-- Access the title property of job object -->
+<ol id="jobDetails">
+    <li><b>Job Title:</b> <%= job.title %></li>
     <li><b>Company:</b> <%= job.company %></li>
     <li><b>Location:</b> <%= job.location %></li>
     <li><b>Salary:</b> <%= job.salary %></li>
@@ -15,12 +16,36 @@
     <li><b>Additional information:</b> <%= job.description %></li>
 </ol>
 
+<button id="updateJobButton">Update Job Details</button>
+
 <% if (!added) { %>
     <p>This isn't the right job? <a href="./jobOverview">Have a look at our other Jobs</a></p>
     <div>
-      <a href="<%= `/jobs/${job._id}/delete?_method=DELETE` %>"
- onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
-
+        <a href="<%= `/jobs/${job._id}/delete?_method=DELETE` %>"
+           onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
     </div>
 <% } %>
+
+<script>
+    $(document).ready(() => {
+        $("#updateJobButton").click(() => {
+            $("#jobDetails").html('');
+            $.get(`/jobs/admin/jobs?format=json`, (data) => {
+                data.forEach((job) => {
+                    $("#jobDetails").append(
+                        `<li><b>Job Title:</b> ${job.title}</li>
+                         <li><b>Company:</b> ${job.company}</li>
+                         <li><b>Location:</b> ${job.location}</li>
+                         <li><b>Salary:</b> ${job.salary}</li>
+                         <li><b>Qualifications:</b> ${job.qualifications}</li>
+                         <li><b>Additional information:</b> ${job.description}</li>`
+                    );
+                    }
+                )
+                console.log('updated');
+            });
+        });
+    });
+</script>
+
 </html>
