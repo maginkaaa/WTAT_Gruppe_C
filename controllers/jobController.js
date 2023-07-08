@@ -1,5 +1,9 @@
 const JobOpening = require("../models/jobOpening.module");
 
+exports.jobNotification = (req, res) => {
+  res.render("jobNotification");
+}
+
 exports.addJob = (req, res) => {
   res.render("addJob");
 };

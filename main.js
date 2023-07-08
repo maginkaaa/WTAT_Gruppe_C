@@ -60,6 +60,13 @@ app.use("/jobs", jobRoutes);
 
 module.exports = router;
 
+const socketIO = require("socket.io");
+const server = http.createServer(app);
+const io = socketIO(server);
+
+const jobNotificationController = require("./controllers/jobNotificationController");
+jobNotificationController.configure(io);
+
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });

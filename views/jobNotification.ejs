@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Notification</title>
+</head>
+<body>
+    <h1>New Job Notification</h1>
+    <form id="jobNotification">
+        <input id="addInfo" type="text">
+    </form>
+
+    <a href="/jobs/<%= job._id %>">View Complete Job Details</a>
+<div id="notification"></div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</html>
