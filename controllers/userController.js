@@ -72,7 +72,7 @@ exports.verifyJWT = (req, res, next) => {
   else {
     res.json({
       error: true,
-      message: "Provide Token"
+      message: "Provide Token Please"
     });
   }
 };
@@ -100,11 +100,6 @@ exports.getAllUser = (req, res) => {
     .then(() => {
       console.log("promise complete");
     });
-};
-
-
-exports.getSignUp = (req, res) => {
-  res.render("signUp");
 };
 
 

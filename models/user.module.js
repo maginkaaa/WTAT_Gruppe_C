@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
 
-const randToken = require
-("rand-token");
+const randToken = require("rand-token");
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
+  apiToken: { type: String},
   //password: { type: String, required: true }
 });
 userSchema.pre("save", function(next) {
