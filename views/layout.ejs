@@ -6,20 +6,20 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="/js/socketNotifications.js" defer></script>
-	<title>Klausurvorbereitung</title>
+	<title>WTAT</title>
 </head>
 
 <body>
 	<div class="login-status">
 		<% if (loggedIn) { %>
-		<div class="bubble logged-in">
+		<div>
 			Logged in as <%= currentUser.username %></a>
 		</div>
-		<div class="log-out">
+		<div>
 			<a href="/users/logout">Log out</a>
 		</div>
 		<%} else {%>
-		<div class="bubble log-in">
+		<div>
 			<a href="/users/login">Log In</a>
 		</div>
 		<% } %>

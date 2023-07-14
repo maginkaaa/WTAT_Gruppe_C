@@ -1,6 +1,5 @@
 const router = require("express").Router(),
-jobController = require("../controllers/jobController"),
-jobNotificationController = require("../controllers/jobNotificationController");
+jobController = require("../controllers/jobController");
 
 router.delete("/:id/delete", jobController.deleteJob);
 
