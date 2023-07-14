@@ -18,7 +18,7 @@ exports.verifyToken = (req, res, next) => {
   } else {
     next(new Error("Invalid API token."));
   }
-}
+};
 
 exports.apiAuthenticate = (req, res, next) => {
   passport.authenticate("local", (errors, user) => {
@@ -40,7 +40,7 @@ exports.apiAuthenticate = (req, res, next) => {
         message: "Could not authenticate user."
       });
   })(req, res, next);
-}
+};
 
 exports.verifyJWT = (req, res, next) => {
   let token = req.headers.token;
