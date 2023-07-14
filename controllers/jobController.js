@@ -68,7 +68,7 @@ exports.getJobInfo = async (req, res) => {
     });
   } catch (error) {
     console.log(`Error fetching job details: ${error.message}`);
-    res.redirect("/job/search");
+    res.redirect("/jobs/search");
   }
 };
 
