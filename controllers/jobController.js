@@ -1,4 +1,5 @@
 const JobOpening = require("../models/jobOpening.module");
+const jobNotificationController = require("./jobNotificationController");
 
 exports.jobNotification = (req, res) => {
   res.render("jobNotification");
@@ -45,6 +46,7 @@ exports.saveJob = async (req, res) => {
       job: newJob,
       added: true,
     });
+    jobNotificationController.sendNotification(newJob);
   } catch (error) {
     console.log(`Error saving job: ${error.message}`);
     res.redirect("/jobs/add");

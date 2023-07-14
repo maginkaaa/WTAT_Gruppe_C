@@ -1,18 +1,50 @@
-<div class="flashes">
-    <% if (flashMessages) { %>
-    <% if (flashMessages.success) { %>
-   <div class="flash success"><%= flashMessages.success %></div>
-    <% } else if (flashMessages.error) { %>
-   <div class="flash error"><%= flashMessages.error %></div>
-   <% } %>
-   <% } %>
-   </div>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1">
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="/js/socketNotifications.js" defer></script>
+	<title>Klausurvorbereitung</title>
+</head>
 
-   <div class="login">
-       <% if (loggedIn) { %>
-       <p> Logged in as
-         <a href="<%=`/users/${currentUser._id}`%>">
-           <%= currentUser.fullName %></a>
-    </p>
-    <% } %>
-      </div>
+<body>
+	<div class="login-status">
+		<% if (loggedIn) { %>
+		<div class="bubble logged-in">
+			Logged in as <%= currentUser.username %></a>
+		</div>
+		<div class="log-out">
+			<a href="/users/logout">Log out</a>
+		</div>
+		<%} else {%>
+		<div class="bubble log-in">
+			<a href="/users/login">Log In</a>
+		</div>
+		<% } %>
+	</div>
+
+	<%- body %>
+
+	<div class="flashes">
+		<% if (flashMessages) { %>
+		<% if (flashMessages.success) { %>
+		<div class="flash success">
+			<%= flashMessages.success %>
+		</div>
+		<% } else if (flashMessages.error) { %>
+		<div class="flash error">
+			<%= flashMessages.error %>
+		</div>
+		<% } %>
+		<% } %>
+	</div>
+
+	<div id="notifications"></div>
+
+</body>
+</html>
+
+
+

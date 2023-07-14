@@ -43,6 +43,11 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(connectFlash());
 
+app.use(express.static("public"));
+
+const layouts = require("express-ejs-layouts");
+app.use(layouts);
+
 app.use(cookieParser("secret_passcode"));
 
 app.use((req, res, next) => {
@@ -60,13 +65,9 @@ app.use("/jobs", jobRoutes);
 
 module.exports = router;
 
-const socketIO = require("socket.io");
-const server = http.createServer(app);
-const io = socketIO(server);
-
-const jobNotificationController = require("./controllers/jobNotificationController");
-jobNotificationController.configure(io);
-
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
+
+const jobNotificationController = require("./controllers/jobNotificationController");
+jobNotificationController.initSocket(server);
